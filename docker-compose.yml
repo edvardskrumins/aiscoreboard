@@ -1,0 +1,33 @@
+
+version: '2'
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: app.dockerfile
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+      - /var/run/docker.sock:/var/run/docker.sock
+#      - /usr/bin:/usr/bin
+    environment:
+      - "DB_HOST=192.168.68.161"
+      - "DB_NAME=scoreboard"
+      - "DB_USER=scoreboard"
+      - "DB_PASSWORD=FvMTAR71wmwvhHzu"
+  web:
+    build:
+      context: ./
+      #      dockerfile: web.dockerfile
+    working_dir: /var/www/html
+    volumes_from:
+      - app
+    ports:
+      - 8080:80
+    environment:
+      - DB_HOST=192.168.68.161
+      - DB_NAME=scoreboard
+      - DB_USER=scoreboard
+      - DB_PASSWORD=FvMTAR71wmwvhHzu
+
+

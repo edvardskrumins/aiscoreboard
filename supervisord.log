@@ -1,0 +1,20 @@
+2019-02-13 11:53:58,188 CRIT Set uid to user 0
+2019-02-13 11:53:58,191 INFO supervisord started with pid 40
+2019-02-13 11:53:59,194 INFO spawned: 'nginx' with pid 43
+2019-02-13 11:54:00,219 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-02-13 11:56:40,237 CRIT Set uid to user 0
+2019-02-13 11:56:40,239 INFO supervisord started with pid 40
+2019-02-13 11:56:41,243 INFO spawned: 'nginx' with pid 43
+2019-02-13 11:56:42,269 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-02-13 12:04:00,523 CRIT Set uid to user 0
+2019-02-13 12:04:00,526 INFO supervisord started with pid 40
+2019-02-13 12:04:01,529 INFO spawned: 'nginx' with pid 43
+2019-02-13 12:04:02,558 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-02-13 12:11:52,797 CRIT Set uid to user 0
+2019-02-13 12:11:52,799 INFO supervisord started with pid 42
+2019-02-13 12:11:53,802 INFO spawned: 'nginx' with pid 45
+2019-02-13 12:11:54,822 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-02-13 12:22:15,762 CRIT Set uid to user 0
+2019-02-13 12:22:15,765 INFO supervisord started with pid 33
+2019-02-13 12:22:16,770 INFO spawned: 'nginx' with pid 36
+2019-02-13 12:22:17,795 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
