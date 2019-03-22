@@ -168,47 +168,81 @@ class BuildContainer implements ShouldQueue
         $test_run->save();
         
 
+      //   Tālāk seko algoritms, kas apmierina šādus nosacījumus:
+   // 1.Reklāmas pauzes garuma precizitāte - par katru 1 sek penalty 10% no reklāmas pauzes score.
+  //   Tatad, ja reklamas pauzes garums tiek pārsniegts par 10 sek vai vairāk, reklāmas pauzes score bus 0
+ //   2.Reklāmas pauzes reklāmu sumāram TRP jātuvojas pie reklāmas pauzes TRP, vai būt lielākam. 
+
+
         $score = 0;
         $json_ads = $csv_ads->jsonSerialize();
         $json_slots = $csv_slots->jsonSerialize();
-        // dd($json_ads);
-        $stdout_array = explode("\n", $this->stream_text);
-        array_pop($stdout_array);
-        // dd($stdout_array[0]);
-    
-
         $result_array = [];
         $already_checked = [];
-        $kek = "";
-        for($i = 1; $i < sizeof($json_ads); $i++) {
-            $result_array[] = array(0, 0, 0, 0, 0, 0, 0, 0, 0);
+        $slot_total = array(); 
+        $penalty = 0;
+        $seconds_over_limit;
+        $slot_score = 0;
+
+        $stdout_array = explode("\n", $this->stream_text);
+        array_pop($stdout_array);
+
+
+        for($i = 1; $i < sizeof($json_slots); $i++) 
+        {
+            $slot_total[$i] = array(0,0,0,0,0,0,0,0,0,0);
         }
-        // dd($result_array);
-        // dd($stdout_array);
-        foreach($stdout_array as $spot) {
-            if(!array_search($spot, $already_checked, true)) {
+
+
+        foreach($stdout_array as $spot)
+         {
+            if(!array_search($spot, $already_checked, true)) 
+            {
                 
                 $match = explode(",", $spot);
-                $slot = $json_slots[$match[1]];
-                // dd($slot);
-                for ($i = 3; $i < sizeof($slot); $i++) {
-                    $result_array[$match[0] - 1][$i - 3] += $slot[$i]; // pārkopē slot trp vērtības uz $result_array
+
+                $ad = $json_ads[$match[0]];
+                
+                for($i = 1; $i < sizeof($ad); ++$i)
+                {
+                    $slot_total[$match[1]][$i-1] += $ad[$i];
                 }
+                // tagad $slot_total satur katrai pauzei savāktās trp vērtības
                 $already_checked[] = $spot;
             }
         }
-        // dd($json_ads);
-
-        for($i = 1; $i < sizeof($json_ads); $i++) {
-            for($j = 0; $j < sizeof($result_array[$i - 1]); $j++) {
-                if($result_array[$i - 1][$j] < $json_ads[$i][$j + 2]) {
-                    $score += $result_array[$i - 1][$j];
-                   
-                } else {
-                    $score += $json_ads[$i][$j + 2];
+   
+        for($i = 1; $i < sizeof($slot_total); ++$i) 
+        {
+            $seconds_over_limit = $slot_total[$i][0] - $json_slots[$i+1][2];
+            if($seconds_over_limit >= 10)
+             {
+                continue;
+             } 
+            else
+             {
+                for($j = 1; $j < sizeof($slot_total[$i]); ++$j)
+                {
+                    if($slot_total[$i][$j] < $json_slots[$i+1][$j+2]) 
+                    {
+                        $slot_score += $slot_total[$i][$j];
+                    }
+                    else
+                    {
+                        $slot_score += $json_slots[$i+1]{$j+2};
+                    }
                 }
+            if($seconds_over_limit > 0)
+            {
+                $penalty = 1 - ($seconds_over_limit / 10);
+                $slot_score *= $penalty; 
             }
+            $score += $slot_score;
+            }
+        $slot_score = 0;
+        $penalty = 0;
         }
+               
         $test_run->score = $score;
         $test_run->save();
 
