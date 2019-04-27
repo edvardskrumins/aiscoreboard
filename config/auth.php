@@ -18,6 +18,8 @@ return [
         'passwords' => 'users',
     ],
 
+
+    
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -99,4 +101,9 @@ return [
         ],
     ],
 
+    'socialite' => [
+    'drivers' => [
+        'google',
+     ],
+   ],
 ];

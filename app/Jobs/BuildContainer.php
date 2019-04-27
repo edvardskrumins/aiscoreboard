@@ -59,15 +59,17 @@ class BuildContainer implements ShouldQueue
     public function handle()
     {
         $zip = new ZipArchive;
+    
         $success = $zip->open(storage_path("app/algorithms/".$this->algorithm_id.".zip"));
         if ($success === TRUE) {
             if(!file_exists(storage_path("app/algorithms/".$this->algorithm_id))) {
-                $zip->extractTo(storage_path("app/algorithms/" . $this->algorithm_id));
+                $zip->extractTo(storage_path("app/algorithms/" . $this->algorithm_id)); 
             }
             $zip->close();
-        } else {
+        } else {    
             return;
         }
+       
         $test_run = TestRun::where("test_data_id", "=", $this->test_id, "and")->where("algorithm_id", "=", $this->algorithm_id)->get();
         if($test_run->isEmpty()) {
             $test_run = new TestRun;
@@ -80,9 +82,7 @@ class BuildContainer implements ShouldQueue
         } else {
             $test_run = $test_run->first();
         }
-        $context = new Context(storage_path("app/algorithms/".$this->algorithm_id));
-        $inputStream = $context->toStream();
-        $docker = Docker::create();
+     
         //$containerManager = $docker->getContainerManager();
 
         // PĀRLIKU 
@@ -93,9 +93,12 @@ class BuildContainer implements ShouldQueue
    
         Storage::disk('local')->put("/algorithms/".$this->algorithm_id."/ads.csv", $csv_ads->__toString());
         Storage::disk('local')->put("/algorithms/".$this->algorithm_id."/slots.csv", $csv_slots->__toString());
-
+   
+        $context = new Context(storage_path("app/algorithms/".$this->algorithm_id));
+        $inputStream = $context->toStream();
+        $docker = Docker::create();
         try {
-            $buildStream = $docker->imageBuild($inputStream, ["t" => "algorithm-".$this->algorithm_id]);            
+            $buildStream = $docker->imageBuild($inputStream, ["t" => $this->test_id."algo-".$this->algorithm_id]);            
         //    if image already exists - do not build
         
         } catch(ImageBuildInternalServerErrorException $err) {
@@ -111,7 +114,7 @@ class BuildContainer implements ShouldQueue
         $test_run->save();
        
         $containerConfig = new ContainersCreatePostBody();
-        $containerConfig->setImage('algorithm-'.$this->algorithm_id); 
+        $containerConfig->setImage($this->test_id.'algo-'.$this->algorithm_id); 
 //             $myfile = fopen(storage_path("app/algorithms/".$this->algorithm_id)."/slots.csv", "r") or die("Unable to open file!");
 // dd(fread($myfile,filesize(storage_path("app/algorithms/".$this->algorithm_id)."/slots.csv")));
 // fclose($myfile);
@@ -167,8 +170,7 @@ class BuildContainer implements ShouldQueue
         $test_run->info = $this->stream_text;
         $test_run->save();
         
-
-      //   Tālāk seko algoritms, kas apmierina šādus nosacījumus:
+    //   Tālāk seko algoritms, kas apmierina šādus nosacījumus:
    // 1.Reklāmas pauzes garuma precizitāte - par katru 1 sek penalty 10% no reklāmas pauzes score.
   //   Tatad, ja reklamas pauzes garums tiek pārsniegts par 10 sek vai vairāk, reklāmas pauzes score bus 0
  //   2.Reklāmas pauzes reklāmu sumāram TRP jātuvojas pie reklāmas pauzes TRP, vai būt lielākam. 
@@ -186,35 +188,36 @@ class BuildContainer implements ShouldQueue
 
         $stdout_array = explode("\n", $this->stream_text);
         array_pop($stdout_array);
-
-
+        // dd($stdout_array);
         for($i = 1; $i < sizeof($json_slots); $i++) 
         {
             $slot_total[$i] = array(0,0,0,0,0,0,0,0,0,0);
         }
-
-
         foreach($stdout_array as $spot)
          {
             if(!array_search($spot, $already_checked, true)) 
             {
                 
                 $match = explode(",", $spot);
-
                 $ad = $json_ads[$match[0]];
+                // dd($stdout_array);
                 
                 for($i = 1; $i < sizeof($ad); ++$i)
                 {
+                    // if($match[1] == 127)
+                    // {
+                    //     dd($stdout_array);
+                    // }
                     $slot_total[$match[1]][$i-1] += $ad[$i];
                 }
                 // tagad $slot_total satur katrai pauzei savāktās trp vērtības
                 $already_checked[] = $spot;
             }
         }
-   
-        for($i = 1; $i < sizeof($slot_total); ++$i) 
+
+        for($i = 1; $i <= sizeof($slot_total); ++$i) 
         {
-            $seconds_over_limit = $slot_total[$i][0] - $json_slots[$i+1][2];
+            $seconds_over_limit = $slot_total[$i][0] - $json_slots[$i][2];
             if($seconds_over_limit >= 10)
              {
                 continue;
@@ -223,13 +226,13 @@ class BuildContainer implements ShouldQueue
              {
                 for($j = 1; $j < sizeof($slot_total[$i]); ++$j)
                 {
-                    if($slot_total[$i][$j] < $json_slots[$i+1][$j+2]) 
+                    if($slot_total[$i][$j] < $json_slots[$i][$j+2]) 
                     {
                         $slot_score += $slot_total[$i][$j];
                     }
                     else
                     {
-                        $slot_score += $json_slots[$i+1]{$j+2};
+                        $slot_score += $json_slots[$i][$j+2];
                     }
                 }
             if($seconds_over_limit > 0)
@@ -242,11 +245,10 @@ class BuildContainer implements ShouldQueue
         $slot_score = 0;
         $penalty = 0;
         }
-               
+        $score = round($score, 2);
         $test_run->score = $score;
         $test_run->save();
 
 
     }
 }
-

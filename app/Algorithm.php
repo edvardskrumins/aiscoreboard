@@ -11,4 +11,8 @@ class Algorithm extends Model
     public function testRuns() {
         return $this->hasMany("App\TestRun");
     }
+    public function user() 
+    {
+        return $this->belongsTo("App\User");
+    }
 }

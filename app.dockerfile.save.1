@@ -1,0 +1,16 @@
+FROM php:7.2-fpm
+
+RUN apt-get update && \
+    apt-get install -y \
+        zlib1g-dev
+RUN docker-php-ext-install pdo_mysql zip dom intl
+FROM ubuntu:18.04
+
+RUN apt-get update && install -y libxml2-dev libmcrypt-dev zlib1g-dev \
+    mysql-client --no-install-recommends
+RUN apt-get -y install apt-transport-https ca-certificates gnupg-agent software-properties-common
+
+
+RUN groupadd --gid 999 docker
+RUN usermod -aG docker www-data
+

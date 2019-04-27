@@ -1,8 +1,9 @@
-FROM arnislielturks/nginx-php-supervisor:1
+FROM atisapply/nginx-php-supervisor:1
 MAINTAINER Arnis Lielturks <arnis.lielturks@gmail.com>
 
 RUN apt-get update && apt-get install -y php-gd
-RUN apt-get -y instal php7.2-zip
+RUN apt-get -y install php7.2-zip
+
 #COPY app /var/www/html/app
 #COPY artisan /var/www/html/app/artisan
 #COPY bootstrap /var/www/html/bootstrap
@@ -17,6 +18,7 @@ RUN apt-get -y instal php7.2-zip
 #COPY composer.json /var/www/html/composer.json
 
 COPY entrypointcust.sh /entrypointcust.sh
+COPY /var/run/docker.sock /var/run/docker.sock
 RUN chmod +x /entrypointcust.sh
 
 EXPOSE 80

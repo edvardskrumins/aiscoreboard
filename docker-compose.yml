@@ -1,33 +1,62 @@
 
 version: '2'
 services:
-  app:
-    build:
-      context: ./
-      dockerfile: app.dockerfile
-    working_dir: /var/www/html
-    volumes:
-      - ./:/var/www/html
-      - /var/run/docker.sock:/var/run/docker.sock
-#      - /usr/bin:/usr/bin
-    environment:
-      - "DB_HOST=192.168.68.161"
-      - "DB_NAME=scoreboard"
-      - "DB_USER=scoreboard"
-      - "DB_PASSWORD=FvMTAR71wmwvhHzu"
+#  app:
+#    build:
+#      context: ./
+#      dockerfile: app.dockerfile2
+#    working_dir: /var/www/html
+#    volumes:
+#      - ./:/var/www/html
+#      - /var/run/docker.sock:/var/run/docker.sock
+##      - /usr/bin:/usr/bin
+#    environment:
+#         - DB_HOST=192.168.68.161
+#         - HOSTNAME=b2d4219c8143
+#         - DB_DATABASE=scoreboard
+#         - PWD=/var/www/html
+#         - DB_PASSWORD=FvMTAR71wmwvhHzu
+#         - SHLVL=3
+#         - HOME=/root
+#         - DB_USERNAME=scoreboard
+#         - LOG_CHANNEL=file
+#         - DB_CONNECTION=mysql
+#         - APP_NAME=fes
+#         - APP_ENV=local
+#         - APP_KEY=base64:C1IQl08HeaUSPfahtrZLL1lL81n3ELMmJd9Tkli6CtA=
+#         - APP_DEBUG=true
+#         - APP_URL=http://localhost
+#         - GOOGLE_CLIENT_ID=230523368052-ia4olmutmugh3ee84sbfhuku3dh4169q.apps.googleusercontent.com
+#         - GOOGLE_CLIENT_SECRET=n570LGZ_eTJQlL5d5Ep0spQL
+#         - GOOGLE_REDIRECT=http://localhost:8080/google/callback
   web:
     build:
       context: ./
       #      dockerfile: web.dockerfile
     working_dir: /var/www/html
-    volumes_from:
-      - app
+#    volumes_from:
+#      - app
     ports:
       - 8080:80
+    volumes:
+      - ./:/var/www/html
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - DB_HOST=192.168.68.161
-      - DB_NAME=scoreboard
-      - DB_USER=scoreboard
-      - DB_PASSWORD=FvMTAR71wmwvhHzu
-
-
+         - DB_HOST=192.168.68.161
+         - HOSTNAME=b2d4219c8143
+         - DB_DATABASE=scoreboard
+         - PWD=/var/www/html
+         - DB_PASSWORD=FvMTAR71wmwvhHzu
+         - SHLVL=3
+         - HOME=/root
+         - DB_USERNAME=scoreboard
+         - LOG_CHANNEL=file
+         - DB_CONNECTION=mysql
+         - APP_NAME=fes
+         - APP_ENV=local
+         - APP_KEY=base64:C1IQl08HeaUSPfahtrZLL1lL81n3ELMmJd9Tkli6CtA=
+         - APP_DEBUG=true
+         - APP_URL=http://localhost
+         - GOOGLE_CLIENT_ID=230523368052-ia4olmutmugh3ee84sbfhuku3dh4169q.apps.googleusercontent.com 
+         - GOOGLE_CLIENT_SECRET=n570LGZ_eTJQlL5d5Ep0spQL
+         - GOOGLE_REDIRECT=http://localhost:8080/google/callback

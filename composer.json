@@ -10,6 +10,7 @@
         "docker-php/docker-php-api": "4.1.35.1",
         "fideloper/proxy": "~4.0",
         "laravel/framework": "5.7.*",
+        "laravel/socialite": "^4.1",
         "laravel/tinker": "~1.0",
         "league/csv": "^8.2"
     },

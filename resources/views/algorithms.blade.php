@@ -1,47 +1,41 @@
 @extends("main")
 @section("content")
+    <div class="container text-center">
     <div class="row">
         <h2 class="col s6 offset-s3">Algorithm upload</h2>
     </div>
     <div class="row">
-        <h5 class="col s6 offset-s3">Upload your solution</h5>
+        <h3 class="col s6 offset-s3">Upload your solution</h3>
     </div>
+    <hr>
     <div class="row">
-        <form class="col s6 offset-s3" method="post" id="uploadForm" action="/algorithm/upload" enctype="multipart/form-data">
+        <form class="col-md-4 col-md-offset-4" method="post" id="uploadForm" action="/algorithm/upload" enctype="multipart/form-data">
             {{ csrf_field() }}
-            <div class="input-field">
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon" id="sizing-addon1">Algorithm name</span>
+                <input type="text" id="algorithmName" name="algorithmName" class="form-control validate" required maxlength="255" aria-describedby="sizing-addon1" required>
+            </div>
+            <!-- <div class="input-field">
                 <label for="algorithmName">Name</label>
                 <input type="text" id="algorithmName" name="algorithmName" class="validate" required maxlength="255">
+            </div> -->
+
+
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">.zip file</span>
+                <input type="file" id="algoFile" name="algoFile" style="height:50px" required>
             </div>
-            <div class="file-field input-field">
-                <div class="btn">
-                    <span>.zip file</span>
-                    <input id="algoFile" name="algoFile" type="file">
-                </div>
-                <div class="file-path-wrapper">
-                    <input id="algorithmFile" name="algorithmFile" class="file-path validate" type="text" required pattern=".+\.zip">
-                </div>
+
+            <hr>
+            <div class="row">
+            <input type="submit" class="col-md-4 col-md-offset-4" value="Upload">
             </div>
-            <input type="submit" class="btn col s12" value="Upload">
         </form>
     </div>
-    <div class="row">
-        <h2 class="col s6 offset-s3">Algorithm submissions</h2>
     </div>
-    <div class="row">
-        <ul class="col s4 offset-s4">
-            @if(sizeof($algorithms))
-                @foreach($algorithms as $algorithm)
-                    <li>
-                        <h3>{{ $algorithm->name }}</h3>
-                        <a class="waves-effect waves-light btn" href="/algorithm/{{ $algorithm->id }}/">Tests</a>
-                        <a class="waves-effect waves-light btn red" href="/algorithm/{{ $algorithm->id }}/delete">Delete</a>
-                    </li>
-                    <hr>
-                @endforeach
-            @else
-                <h3>No algorithms submitted yet!</h3>
-            @endif
-        </ul>
-    </div>
+    
+
+
+
+    
 @endsection
