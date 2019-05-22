@@ -33,7 +33,9 @@ Route::get("/newtest", function() {
     return view('newtest');
 });
 Route::post("/algorithm/upload", "AlgorithmController@upload");
-Route::get("/algorithm/{id}/delete", "AlgorithmController@delete");
+Route::get("/algorithm/{id}/deleteMyAlgo", "AlgorithmController@deleteMyAlgo");
+    Route::get("/algorithm/{id}/delete", "AlgorithmController@delete");
+
 });
 
 
@@ -69,3 +71,9 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/myalgorithms', 'AlgorithmController@mysubmissions');
+
+Route::get('/posts', 'PostsController@index')->name('allPosts');
+
+Route::post('/posts/create', 'PostsController@create')->name('createPost');
+
+Route::get('/posts/delete/{id}', 'PostsController@destroy')->name('deletePost');

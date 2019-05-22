@@ -51,6 +51,7 @@
     
     </head>
     <body>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
 
     <nav class="navbar navbar-default">
@@ -61,7 +62,7 @@
     <ul class="nav navbar-nav">
     <img src="/logo.png" id="navbar_logo">
 
-      <h3><a id="nav-link"href="/">AIscoreboard</a></h3>
+      <h3><a id="nav-link"href="/">MediaAlgo</a></h3>
 
     </ul>
     </div>
@@ -70,17 +71,19 @@
     
       
       <ul class="nav navbar-nav navbar-right">
-      @guest   
-                            <li><a href="/data/">Data</a></li>
-                            <li><a href="/submissions/">Algorithm submissions</a></li>
-                            <html lang="en">
-                            <li><img src="/google.jpg" height="40" width="40"></li> 
-                            <li><a href="{{ route('login.provider', 'google') }}" 
-            class="btn btn-secondary">{{ __('Sign in with Google') }}</a></li>
-            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-    
-            </a>
-  
+      @guest
+
+              <li><a href="/register/">Reģistrēties</a></li>
+              <li><a href="/login/">Pieslēgties</a></li>
+
+{{--              <html lang="en">--}}
+{{--                            <li><img src="/google.jpg" height="40" width="40"></li> --}}
+{{--                            <li><a href="{{ route('login.provider', 'google') }}" --}}
+{{--            class="btn btn-secondary">{{ __('Sign in with Google') }}</a></li>--}}
+{{--            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>--}}
+{{--    --}}
+{{--            </a>--}}
+
    
             
 
@@ -88,10 +91,14 @@
 
             
         @else
-            <li><a href="/data/">Data</a></li>
-            <li><a href="/submissions/">Algorithm submissions</a></li>
-            <li><a href="/newtest/">Add new Test Data</a></li>
-            <li><a href="/algorithm/">Upload solution</a></li>
+            <li><a href="/">Top 10</a></li>
+            <li><a href="/posts">Ziņojumi</a></li>
+            <li><a href="/data/">Testa scenāriji</a></li>
+            <li><a href="/submissions/">Algoritmi</a></li>
+          @if(Auth::User()->role == '2')
+            <li><a href="/newtest/">Ģenerēt jaunu testu</a></li>
+          @endif
+            <li><a href="/algorithm/">Iesūtīt algoritmu</a></li>
             
 
         <li class="dropdown">
@@ -101,11 +108,11 @@
                 </a>
 
                 <ul class="dropdown-menu">
-                    <li><a href="/myalgorithms"> My submissions </a></li>
+                    <li><a href="/myalgorithms"> Mani algoritmi </a></li>
                     <li><a href="{{ route('logout') }}"
                         onclick="event.preventDefault();
                                         document.getElementById('logout-form').submit();">
-                        {{ __('Logout') }}
+                        {{ __('Atslēgties') }}
                     </a></li>
 
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -120,7 +127,7 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-<button onclick="topFunction()" id="myBtn" title="Go to top">Back to the top</button>
+<button onclick="topFunction()" id="myBtn" title="Go to top">Atpakaļ uz augšu</button>
 
 
 

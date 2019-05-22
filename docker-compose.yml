@@ -1,5 +1,7 @@
 
 version: '2'
+
+
 services:
 #  app:
 #    build:
@@ -29,6 +31,7 @@ services:
 #         - GOOGLE_CLIENT_ID=230523368052-ia4olmutmugh3ee84sbfhuku3dh4169q.apps.googleusercontent.com
 #         - GOOGLE_CLIENT_SECRET=n570LGZ_eTJQlL5d5Ep0spQL
 #         - GOOGLE_REDIRECT=http://localhost:8080/google/callback
+
   web:
     build:
       context: ./
@@ -42,11 +45,11 @@ services:
       - ./:/var/www/html
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-         - DB_HOST=192.168.68.161
+         - DB_HOST=192.168.0.101
          - HOSTNAME=b2d4219c8143
          - DB_DATABASE=scoreboard
          - PWD=/var/www/html
-         - DB_PASSWORD=FvMTAR71wmwvhHzu
+         - DB_PASSWORD=usp123
          - SHLVL=3
          - HOME=/root
          - DB_USERNAME=scoreboard
@@ -60,3 +63,4 @@ services:
          - GOOGLE_CLIENT_ID=230523368052-ia4olmutmugh3ee84sbfhuku3dh4169q.apps.googleusercontent.com 
          - GOOGLE_CLIENT_SECRET=n570LGZ_eTJQlL5d5Ep0spQL
          - GOOGLE_REDIRECT=http://localhost:8080/google/callback
+  

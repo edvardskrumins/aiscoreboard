@@ -13,7 +13,7 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    Jūs esat pieslēdzies Mediju algoritmu testēšanas videi!
                 </div>
             </div>
         </div>

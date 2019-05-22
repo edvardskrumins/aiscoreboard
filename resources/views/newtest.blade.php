@@ -1,5 +1,7 @@
 @extends('main')
 @section('content')
+    @if(Auth::User()->role == '2')
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.1/css/mdb.min.css" />
 
 
@@ -13,7 +15,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.1/js/mdb.min.js"></script>
 <div class="container">
 <div class="row">
-        <h2 class="text-center">Add new Test data entry</h2>
+        <h2 class="text-center">Ģenerēt jaunu testu</h2>
         <hr>
     </div>
     <!-- <div class="form-group"> -->
@@ -22,8 +24,10 @@
             {{ csrf_field() }}
             
             <div class="input-field input-group input-group-lg">
-                <span class="input-group-addon" id="sizing-addon1">Name</span>
-                <input type="text" name="testName" class="form-control" class="validate" required maxlength="255" aria-describedby="sizing-addon1" required>
+                <span class="input-group-addon" id="sizing-addon1">Testa scenārija nosaukums</span>
+                <input type="text" name="testName" class="form-control" class="validate"  maxlength="32" aria-describedby="sizing-addon1" required
+                       oninvalid="this.setCustomValidity('Lūdzu, aizpildiet lauku!')"
+                       oninput="this.setCustomValidity('')">
             </div>
             
 
@@ -32,24 +36,32 @@
                 <input type="text" id="testName" name="testName" class="validate" required maxlength="255">
             </div> -->
             <div class="input-field input-group input-group-lg">
-                <span class="input-group-addon" id="sizing-addon1">Total slot length per day (seconds)</span>
-                <input type="text" name="daySlotLen" id="daySlotLen" min="1" class="form-control validate" aria-describedby="sizing-addon1" required>
+                <div style="margin-left:-0px;">
+                <span  class="input-group-addon" id="sizing-addon1">Maksimālais kopējais reklāmas paužu garums dienā (sekundēs)</span>
+                </div>
+                <input type="text" name="daySlotLen" id="daySlotLen" min="1" class="form-control validate" aria-describedby="sizing-addon1" required
+                       oninvalid="this.setCustomValidity('Maksimālā pieļaujamā vertība 86400!')"
+                       oninput="this.setCustomValidity('')">
             </div>
             <!-- <div class="input-field col-md-8">
                 <label for="daySlotLen">Total slot length per day (seconds)</label>
                 <input type="number" id="daySlotLen" class="validate" name="daySlotLen" min="1" required>
             </div> -->
             <div class="input-field input-group input-group-lg date_picker">
-                <span class="input-group-addon" id="sizing-addon1">Start generating from</span>
-                <input type="text" name="dayFrom" id="dayFrom" class="form-control validate datepicker" aria-describedby="sizing-addon1" required>
+                <span class="input-group-addon" id="sizing-addon1">Testa scenārija sākuma datums</span>
+                <input type="text" name="dayFrom" id="dayFrom" class="form-control validate datepicker" aria-describedby="sizing-addon1" required
+                       oninvalid="this.setCustomValidity('Lūdzu, aizpildiet  lauku!')"
+                       oninput="this.setCustomValidity('')">
             </div>
             <!-- <div class="input-field col-md-10">
                 <label for="dayFrom">Start generating from</label>
                 <input type="text" id="dayFrom" class="validate datepicker" name="dayFrom" required>
             </div> -->
             <div class="input-field input-group input-group-lg date_picker">
-                <span class="input-group-addon" id="sizing-addon1">Generate till</span>
-                <input type="text" name="dayTill" id="dayTill" class="form-control validate datepicker" aria-describedby="sizing-addon1" required>
+                <span class="input-group-addon" id="sizing-addon1">Testa scenārija beigu datums</span>
+                <input type="text" name="dayTill" id="dayTill" class="form-control validate datepicker" aria-describedby="sizing-addon1" required
+                       oninvalid="this.setCustomValidity('Lūdzu, aizpildiet lauku!')"
+                       oninput="this.setCustomValidity('')">
             </div>
 
             <!-- <div class="input-field col-md-10">
@@ -57,8 +69,10 @@
                 <input type="text" id="dayTill" class="validate datepicker" name="dayTill" required>
             </div> -->
             <div class="input-field input-group input-group-lg">
-                <span class="input-group-addon" id="sizing-addon1">Ads/slots ratio</span>
-                <input type="number" name="adsSlotsRatio" id="adsSlotsRatio" class="form-control validate" required_min="2" step="0.01" aria-describedby="sizing-addon1" required>
+                <span class="input-group-addon" id="sizing-addon1">Reklāmu / reklāmas paužu attiecība </span>
+                <input type="number" name="adsSlotsRatio" id="adsSlotsRatio" class="form-control validate" required_min="2" max="5" step="0.01" aria-describedby="sizing-addon1" required
+                       oninvalid="this.setCustomValidity('Maksimālā pieļaujamā vertība - 100!')"
+                       oninput="this.setCustomValidity('')">
             </div>
             
 
@@ -85,7 +99,7 @@
             </div>-->
             <hr>
             <div class="row">
-            <input type="submit" class="col-md-4 col-md-offset-4" value="Save">
+            <input type="submit" class="col-md-4 col-md-offset-4" value="Ģenerēt">
             </div>
             
         </form>
@@ -104,5 +118,5 @@ $(function(){
         });
     });
     </script>
-
+@endif
 @endsection

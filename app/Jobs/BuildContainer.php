@@ -50,7 +50,6 @@ class BuildContainer implements ShouldQueue
      */
 
     private function saveError($test_run, $err) {
-        dd($err);
         $test_run->status = 3;
         $test_run->info = $err->getMessage();
         $test_run->save();
@@ -228,11 +227,11 @@ class BuildContainer implements ShouldQueue
                 {
                     if($slot_total[$i][$j] < $json_slots[$i][$j+2]) 
                     {
-                        $slot_score += $slot_total[$i][$j];
+                        $slot_score += $slot_total[$i][$j]; // ja savakts vairak nekā bija nepieciešams, tad summē savākto rezultātu
                     }
                     else
                     {
-                        $slot_score += $json_slots[$i][$j+2];
+                        $slot_score += $json_slots[$i][$j+2]; // citādāk summē to, cik bija nepieciešams.
                     }
                 }
             if($seconds_over_limit > 0)

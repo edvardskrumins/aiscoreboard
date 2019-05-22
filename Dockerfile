@@ -1,5 +1,6 @@
 FROM atisapply/nginx-php-supervisor:1
 MAINTAINER Arnis Lielturks <arnis.lielturks@gmail.com>
+#FROM nginx:latest
 
 RUN apt-get update && apt-get install -y php-gd
 RUN apt-get -y install php7.2-zip
@@ -18,7 +19,7 @@ RUN apt-get -y install php7.2-zip
 #COPY composer.json /var/www/html/composer.json
 
 COPY entrypointcust.sh /entrypointcust.sh
-COPY /var/run/docker.sock /var/run/docker.sock
+
 RUN chmod +x /entrypointcust.sh
 
 EXPOSE 80
@@ -39,5 +40,6 @@ RUN /usr/bin/crontab /etc/cron.d/appcron
 
 #RUN chown -R www-data:www-data /var/www/html
 #RUN chmod -R 777 /var/www/html/storage
-
 ENTRYPOINT ["/bin/bash", "-c", "/entrypointcust.sh"]
+
+

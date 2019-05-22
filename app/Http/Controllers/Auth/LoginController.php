@@ -75,6 +75,7 @@ class LoginController extends Controller
             $newUser->email_verified_at = now();
             $newUser->avatar            = $user->getAvatar();
             $newUser->save();
+            $newUser->role();
             auth()->login($newUser, true);
         }
     

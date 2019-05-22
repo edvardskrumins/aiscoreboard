@@ -1,0 +1,7 @@
+2019-05-08 16:30:11,754 CRIT Set uid to user 0
+2019-05-08 16:30:11,755 INFO supervisord started with pid 33
+2019-05-08 16:30:12,757 INFO spawnerr: can't find command '/usr/sbin/nginx'
+2019-05-08 16:30:13,759 INFO spawnerr: can't find command '/usr/sbin/nginx'
+2019-05-08 16:30:15,763 INFO spawnerr: can't find command '/usr/sbin/nginx'
+2019-05-08 16:30:18,767 INFO spawnerr: can't find command '/usr/sbin/nginx'
+2019-05-08 16:30:18,767 INFO gave up: nginx entered FATAL state, too many start retries too quickly

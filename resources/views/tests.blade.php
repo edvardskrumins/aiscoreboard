@@ -3,7 +3,7 @@
 <div class="container-fluid">
     <div class="text-center">
 
-        <h1>Available tests</h1>
+        <h1>Pieejamie testu scenāriji</h1>
     </div>
    
     <hr>
@@ -15,7 +15,7 @@
                         <h3 class="text-center">{{ $algorithm->name }}</h3>
                             <div class="text-center">
                                 <a href="/algorithm/{{ $algorithm->id }}/">
-                                    <button type="button" class="btn btn-primary"> Test </button>
+                                    <button type="button" class="btn btn-primary"> Testēt </button>
                                 </a>
                             </div>
                     </li>
@@ -31,7 +31,7 @@
 <div class="col-md-4 col-md-offset-2">
 <h2 class="text-center"> {{ $chosen_algorithm->name }}</h2>
 
-<a href="/algorithm/{{ $chosen_algorithm->id }}/testAll"> <button class="btn btn-warning text-center">TEST ALL </button> </a> 
+<a href="/algorithm/{{ $chosen_algorithm->id }}/testAll"> <button class="btn btn-warning text-center">TESTĒT VISUS</button> </a>
 
 <hr>
 
@@ -42,16 +42,18 @@
                     <div class="list-group-item">
                         <h3>{{ $entry->name }}</h3>
                         <a href="/algorithm/{{ $algorithm_id }}/test/{{ $entry->id }}" class="btn">
-                            <button type="button" class="btn btn-primary"> Test </button>
+                            <button type="button" class="btn btn-primary"> Testēt </button>
                         </a>
                         @if($run_stats[$entry->id]["id"] != 0)
-                            <span>Status: {{ $run_stats[$entry->id]["status"] }}</span>
-                            @if($run_stats[$entry->id]["status"] == "success")
+{{--                            <span>StatusS: {{ $run_stats[$entry->id]["status"] }}</span>--}}
+                            <span>Statuss: Notestēts!</span>
+
+                        @if($run_stats[$entry->id]["status"] == "success")
                                 <a href="/algorithm/{{ $run_stats[$entry->id]["id"] }}/output/">
-                                <button type="button" class="btn btn-default"> Download output </button>
+                                <button type="button" class="btn btn-default"> Lejupielādēt rezultātu </button>
                                 </a>
                                 <div>
-                                <span> <strong>Score:</strong> {{ $run_stats[$entry->id]["score"] }}</span>
+                                <span> <strong>Rezultāts:</strong> {{ $run_stats[$entry->id]["score"] }}</span>
                                 </div>
                             @endif
                         @else

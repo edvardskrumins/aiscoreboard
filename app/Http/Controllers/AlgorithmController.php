@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\TestRun;
+use function GuzzleHttp\Psr7\copy_to_string;
 use Illuminate\Http\Request;
 use App\Algorithm;
 use App\TestData;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Jobs\BuildContainer;
 use Auth;
 use App\User;
+use \DateTime;
 
 class AlgorithmController extends Controller
 {
@@ -32,11 +34,17 @@ class AlgorithmController extends Controller
         return redirect("/submissions/");
     }
 
-    function delete($id) {
+    function deleteMyAlgo($id) {
         $algorithm = Algorithm::find($id);
         $algorithm->delete();
         Storage::delete("algorithms/".$id.".zip");
         return redirect("/myalgorithms");
+    }
+    function delete($id) {
+        $algorithm = Algorithm::find($id);
+        $algorithm->delete();
+        Storage::delete("algorithms/".$id.".zip");
+        return redirect("/submissions");
     }
 
     function testList($id) 
@@ -65,37 +73,47 @@ class AlgorithmController extends Controller
         $algorithm_id = TestRun::all();
         $last_algorithm_id = Algorithm::orderBy('id', 'desc')->first();
         $total_algorithm_count = $last_algorithm_id->id;
-        $score = 0;
+//        $score = 0;
         $score_table = array();
         $algorithm_names_by_id = array();
         $score_table_tested_only = array();
+
         
         for($i=1; $i<=$total_algorithm_count; $i++)
         {
-            $score_table[$i] = array(0,0);
+            $score_table[$i] = array(0,0,0);
         }
 
         foreach($algorithm_id as $test_case)
         {
             $score_table[$test_case->algorithm_id][0] = $test_case->algorithm_id; 
             $score_table[$test_case->algorithm_id][1] += $test_case->score;
-        }
+            if($score_table[$test_case->algorithm_id][2] === 0) {
+                $score_table[$test_case->algorithm_id][2] = $test_case->created_at;
+            }
+            else {
+                if(new DateTime($test_case->created_at) > new DateTime($score_table[$test_case->algorithm_id][2])) {
+                $score_table[$test_case->algorithm_id][2] = $test_case->created_at;
+            }
+            }
 
+        }
         array_multisort( array_column($score_table, 1), SORT_DESC, $score_table );
-       
         $i=0;
         while($score_table[$i][0] != 0)
         {
             $score_table_tested_only[$i][0] = $score_table[$i][0];
             $score_table_tested_only[$i][1] = $score_table[$i][1];
+            $score_table_tested_only[$i][2] = $score_table[$i][2];
             $i++;
         }
         for($i = 0; $i < sizeof($score_table_tested_only); $i++)
         {
             $algorithm_row = Algorithm::where("id", "=", $score_table_tested_only[$i][0])->first();
             $algorithm_names_by_id[$i][0] = $algorithm_row->name;
+//            $x =
+            $algorithm_names_by_id[$i][1] = DB::table('users')->select('name')->where('id', '=', $algorithm_row->user_id)->first();
         }
-      
 
         return view('dashboard', ['total_algorithm_count' => $total_algorithm_count,'score_table_tested_only' => $score_table_tested_only, 'algorithm_names_by_id' => $algorithm_names_by_id]);
 
